@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>PDF Creator</title>
+<link rel="stylesheet" href="../static/css/currency_styles.css">
+{% endblock %}
+
+{% block body %}
+<div id="container">
+    <h1 id="header"><a href="/">PDF Creator</a></h1>
+
+    <div class="add-container">
+        <div class="dropdown-container">
+            <div class="select-btn">
+                <span class="curr-btn">Select</span>
+                <span class="arrow-down">
+                    <i class="fa-solid fa-chevron-down"></i>
+                </span>
+            </div>
+            {% if currencies|length >= 1 %}
+            <ul class="list-items">
+                {% for curr in currencies %}
+                <li class="item">
+                    <span class="checkbox">
+                        <i class="fa-solid fa-check check-icon"></i>
+                    </span>
+                    <span class="item-text">{{curr.short}}</span>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+        </div>
+        <a class="add-from-list-btn" name="add-btn">Add</a>
+    </div>
+</div>
+<script src="../static/js/script.js"></script>
+{% endblock %}

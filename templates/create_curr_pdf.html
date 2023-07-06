@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>PDF Creator</title>
+<link rel="stylesheet" href="../static/css/pdf_styles.css">
+{% endblock %}
+
+{% block body %}
+<div id="container">
+    <h1 id="header"><a href="/">PDF Creator</a></h1>
+
+    <div class="pdf-cont">
+        <div class="price-cont">
+            <form action="/download" method="POST" >
+                {% for curr in currencies %}
+                <div class="curr-price">
+                    <span>{{ curr }}</span>
+                    <input type="text" name="{{ curr }}-sk" placeholder="SKUP">
+                    <input type="text" name="{{ curr }}-sp" placeholder="SPRZEDAZ">
+                </div>
+                {% endfor %}
+                <input type="text" name="currencies" value="{{ currencies_input }}" style="display: none;">
+                <div class="submit-cont">
+                    <input type="submit" name="submit" id="pdf-submit" value="create">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

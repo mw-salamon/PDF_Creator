@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>PDF Creator</title>
+<link rel="stylesheet" href="../static/css/opt_styles.css">
+{% endblock %}
+
+{% block body %}
+<div id="container">
+    <h1 id="header"><a href="/">PDF Creator</a></h1>
+
+    <div class="add-cont">
+        <form action="/curr-add" method="POST" enctype="multipart/form-data">
+            <div class="short">
+                <input type="text" name="short" id="short" required autocomplete="off" placeholder="Currency Short">
+            </div>
+            <div class="path">
+                <input type="file" name="file" id="file" required>
+                <label for="file">Upload Flag</label>
+            </div>
+            <input id="submit-btn" type="submit" value="Add" onclick="console.log('ess')">
+        </form>
+    </div>
+</div>
+{% endblock %}

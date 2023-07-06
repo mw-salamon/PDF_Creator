@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>PDF Creator</title>
+<link rel="stylesheet" href="../static/css/opt_styles.css">
+{% endblock %}
+
+{% block body %}
+<div id="container">
+    <h1 id="header"><a href="/">PDF Creator</a></h1>
+
+    <div class="buttons-cont">
+        <a href="/curr-add" class="btn">Add new</a>
+        <a href="/curr-opt/from-list" class="btn">Add from list</a>
+    </div>
+</div>
+{% endblock %}

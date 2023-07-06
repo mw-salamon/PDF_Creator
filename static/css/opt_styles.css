@@ -1,0 +1,94 @@
+#container {
+    display: flex;
+    box-sizing: border-box;
+    height: 100vh;
+    padding-top: 13rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    background: #2D2727;
+    font-family: 'Outfit', sans-serif;
+}
+
+.buttons-cont {
+    display: flex;
+    justify-content: space-evenly;
+    width: 20rem;
+}
+
+.btn {
+    font-size: 1rem;
+}
+
+.add-cont form {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    align-items: end;
+}
+
+form div {
+    display: flex;
+    flex-direction: column;
+    width: 7.5rem;
+    color: #F0EB8D;
+    font-size: 12px;
+}
+
+form div input[type="text"]::placeholder {
+    color: #F0EB8D;
+}
+
+form div input:focus {
+    border: none;
+    outline: none;
+}
+
+form div input[type=file]::file-selector-button {
+    width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1; 
+}
+
+.path {
+    text-align: center;
+    line-height: 1.5rem;  
+    width: 7.5rem;
+    height: 1.5rem;
+    background-color: #413543;
+    color: #F0EB8D;
+    font-size: 14px;
+    font-weight: 300;
+    border-radius: 1rem;
+    box-shadow: 0 0 5px rgba(143, 67, 238, 0.1);
+    z-index: 2;
+    user-select: none;
+    transition: 0.1s ease-in;
+
+    &:hover {
+        box-shadow: 0 0 5px rgba(143, 67, 238, 0.25);
+    }
+}
+
+
+.path input {
+    color: transparent;
+    width: 7.5rem;
+    height: 1.5rem;
+    z-index: 1000;
+}
+
+#submit-btn {
+    background-color: #413543;
+    border: none;
+    border-radius: 1rem;
+    height: 1.5rem;
+    box-shadow: 0 2px 5px rgba(143, 67, 238, 0.1);
+    color: #F0EB8D;
+    font-family: 'Outfit', sans-serif;
+    text-transform: uppercase;
+    cursor: pointer;
+}

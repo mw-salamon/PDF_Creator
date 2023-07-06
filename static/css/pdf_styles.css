@@ -1,0 +1,47 @@
+#container {
+    gap: 0;
+}
+
+.curr-price {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 1rem;
+    width: 25rem;
+    margin: 1rem 0;
+}
+
+.curr-price span {
+    color: #F0EB8D;
+    width: 1rem;
+}
+
+.curr-price input {
+    width: 5rem;
+}
+
+.head {
+    display: flex;
+    gap: 5rem;
+    justify-content: space-around;
+}
+
+.head div {
+    color: #F0EB8D;
+}
+
+.submit-cont {
+    display: flex;
+    justify-content: end;
+    margin-top: 2rem;
+    padding-right: 2.5rem;
+
+    & input {
+        width: 6rem;
+        text-transform: uppercase;
+        transition: 0.1s ease-in;
+
+        &:hover {
+            box-shadow: 0 0 5px rgba(143, 67, 238, 0.25);
+        }
+    }
+}
