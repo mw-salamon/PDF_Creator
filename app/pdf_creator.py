@@ -28,7 +28,7 @@ class PDF(FPDF):
         now = datetime.now()
         date = now.strftime("%d-%m-%Y")
         pdf_name += date+".pdf"
-        self.output(pdf_name)
+        self.output(f'app/{pdf_name}')
 
         return pdf_name
 
