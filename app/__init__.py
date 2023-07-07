@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, flash, jsonify, session, send_file, after_this_request
 from flask_sqlalchemy import SQLAlchemy
-# from flask_session import Session
 from sqlalchemy import inspect
 from werkzeug.utils import secure_filename
 import io
