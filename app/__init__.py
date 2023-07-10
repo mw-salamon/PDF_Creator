@@ -2,10 +2,10 @@ from flask import Flask, render_template, request, redirect, flash, jsonify, ses
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import inspect
 from werkzeug.utils import secure_filename
-import io
 from app.pdf_creator import PDF
-import tempfile
 from PIL import Image
+import io, tempfile
+
 
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
