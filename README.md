@@ -6,7 +6,7 @@ My motive behind creation of this app was to design a universal tool, which coul
 
 In the future I hope to expand the template list and have my life even more convenient. Also I could add features like saving few of the pdfs that were created if the user would like to download them again. Also to make it even more personal I could implement sign in, for each user to have their own pdfs.
 
-The app is also deployed on AWS EC2 instance and database is deployed on AWS RD. You can check it by entering the url: `http://pdfcreatorkfps.com/`
+The app is also deployed on AWS EC2 instance and database is deployed on AWS RD. You can check it by entering the url: http://pdfcreatorkfps.com/
 
 ### Tech Stack:
 - Python
@@ -38,8 +38,4 @@ Here is a basic guide to run the app on your own computer, to check it out:
 - Then all the things should be set and you should be able to start the application. You can do it in two ways, with console or in your IDE.
 1. To launch app from console type in default project catalog:
 `python app.py`
-<<<<<<< HEAD
 2. To launch app from console just click RUN button in the top right corner of the screen (For VS Code)
-=======
-2. To launch app from console just click RUN button in the top right corner of the screen (For VS Code)
->>>>>>> 4073acb9917816f4c40302c5445bf0c446d2441e
