@@ -38,4 +38,8 @@ Here is a basic guide to run the app on your own computer, to check it out:
 - Then all the things should be set and you should be able to start the application. You can do it in two ways, with console or in your IDE.
 1. To launch app from console type in default project catalog:
 `python app.py`
+<<<<<<< HEAD
 2. To launch app from console just click RUN button in the top right corner of the screen (For VS Code)
+=======
+2. To launch app from console just click RUN button in the top right corner of the screen (For VS Code)
+>>>>>>> 4073acb9917816f4c40302c5445bf0c446d2441e
