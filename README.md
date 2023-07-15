@@ -29,13 +29,13 @@ Here is a basic guide to run the app on your own computer, to check it out:
 - Then type: 
   `cd fit-connect`
 - To install all needed dependencies you need to create your own virtual environment. To create it I recommend watching one of these tutorials:
--- For Windows: https://www.youtube.com/watch?v=APOPm01BVrk
--- For Mac/Linux: https://www.youtube.com/watch?v=Kg1Yvry_Ydk
+1. For Windows: https://www.youtube.com/watch?v=APOPm01BVrk
+2. For Mac/Linux: https://www.youtube.com/watch?v=Kg1Yvry_Ydk
 - To download needed libraries you need to activate your venv (it is shown in the tutorials) and type command:
   `pip install -r requirements.txt`
 - Open the foler in your favourite IDE (I recommend **VS Code**)
 - In line 14th of the *__init__.py* file, change the database url to your own. For MySQL database, the URI should look like this: `mysql+mysqldb://username:password@localhost:port/db_name`
 - Then all the things should be set and you should be able to start the application. You can do it in two ways, with console or in your IDE.
--- To launch app from console type in default project catalog:
+1. To launch app from console type in default project catalog:
 `python app.py`
--- To launch app from console just click RUN button in the top right corner of the screen (For VS Code)
+2. To launch app from console just click RUN button in the top right corner of the screen (For VS Code)
