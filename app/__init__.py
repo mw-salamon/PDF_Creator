@@ -11,12 +11,11 @@ ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 app = Flask(__name__)
 db = SQLAlchemy()
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqldb://admin:rpumk123@pdf-creator-db.crso7vjacfgq.eu-central-1.rds.amazonaws.com:3306/pdf_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqldb://username:password@localhost:port/db_name'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.secret_key = '33352a946f0c2b8629d29b59f61535f41334c32243a2410b50ea9290ecc756c6'
-# Session(app)
 db.init_app(app)
 
 def allowed_file(filename):
