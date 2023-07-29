@@ -193,7 +193,6 @@ def addToExchange():
         currencies = CurrencyEntity.query.all()
         return render_template('curr_exchange.html', currencies=currencies)
 
-
 @app.route('/curr-opt')
 @login_required
 def currOpt():
@@ -213,21 +212,38 @@ def currency():
 @app.route('/create-curr-pdf', methods=['POST'])
 @login_required
 def createPdf():
-    exchange = request.form['currencies']
-    entity = ExchangeEntity.query.filter_by(name=exchange, user_id=current_user.id).first()
-    currency_list = []
-    if exchange:
-        currencies = entity.currencies
-        currency_list = [currency.short for currency in currencies]
-    return render_template('create_curr_pdf.html', currencies = currency_list, currencies_input = currency_list)
+    exchange = request.form.get('exchange')
+    currencies = request.form.get('currencies')
+
+    print(exchange)
+    print(currencies)
+
+    if currencies:
+        return render_template('create_curr_pdf.html', currencies = currencies.split(','), currencies_input = currencies)
+    elif exchange:
+        entity = ExchangeEntity.query.filter_by(name=exchange, user_id=current_user.id).first()
+        currency_list = []
+        currency_names = ''
+        if entity:
+            currencies = entity.currencies
+            currency_list = [currency.short for currency in currencies]
+            for i in range(0, len(currency_list)):
+                currency_names+=currency_list[i]
+                if i < len(currency_list)-1:
+                    currency_names+=','
+        return render_template('create_curr_pdf.html', currencies = currency_list, currencies_input = currency_names)
+    
+    return '', 200
+
     
 @app.route('/download', methods=['POST'])
 @login_required
 def download_pdf():
     currencies = []
-    data = request.form['currencies']
+    data = request.form.get('currencies')
     curr_to_add = []
     curr_dict = {}
+
 
     for item in data.split(","):
         curr_entity = CurrencyEntity.query.filter(CurrencyEntity.short == item).first()

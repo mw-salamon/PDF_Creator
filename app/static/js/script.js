@@ -64,7 +64,7 @@ addTmpBtn.forEach(btn => {
 
         element1.value = btn.innerText;
         
-        element1.name = "currencies";
+        element1.name = "exchange";
         form.appendChild(element1);
     
         document.body.appendChild(form);
