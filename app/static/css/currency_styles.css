@@ -19,7 +19,6 @@
 .select-btn {
     display: flex;
     height: 2rem;
-    line-height: 0.5rem;
     align-items: center;
     justify-content: space-between;
     padding: 0 1rem;
@@ -35,6 +34,7 @@
 }
 
 .select-btn .curr-btn {
+    overflow: auto;
     color: #F0EB8D;
 }
 
@@ -122,6 +122,36 @@
 .add-from-list-btn {
     width: 5rem;
     height: 2rem;
+    text-decoration: none;
+    text-align: center;
+    line-height: 2rem;
+    border-radius: 1rem;
+    background-color: #413543;
+    border: none;
+    color: #F0EB8D;
+    text-transform: uppercase;
+    font-family: 'Outfit', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(143, 67, 238, 0.1);
+    transition: 0.1s ease-in;
+
+    &:hover {
+        box-shadow: 0 0 5px rgba(143, 67, 238, 0.25);
+    }
+}
+
+.exchange-templates{
+    margin-top: 2rem;
+    display: inline-flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    width: 22rem;
+}
+
+.add-from-template-btn {
+    width: 7.5rem;
+    height: 2rem;
+    margin: 1rem 0.5rem;
     text-decoration: none;
     text-align: center;
     line-height: 2rem;

@@ -1,37 +1,110 @@
-from flask import Flask, render_template, request, redirect, flash, jsonify, session, send_file, after_this_request
+from flask import Flask, jsonify, render_template, request, redirect, flash, send_file, url_for
+from flask_login import LoginManager, UserMixin, current_user, login_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import inspect
 from werkzeug.utils import secure_filename
 from app.pdf_creator import PDF
 from PIL import Image
-import io, tempfile
+from dotenv import load_dotenv
+from pathlib import Path
+from werkzeug.security import generate_password_hash, check_password_hash
+import os, io, tempfile, json
 
 
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
+dotenv_path = Path('app/static/env_var/.env')
+load_dotenv(dotenv_path=dotenv_path)
+
 app = Flask(__name__)
 db = SQLAlchemy()
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqldb://admin:rpumk123@pdf-creator-db.crso7vjacfgq.eu-central-1.rds.amazonaws.com:3306/pdf_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
-app.secret_key = '33352a946f0c2b8629d29b59f61535f41334c32243a2410b50ea9290ecc756c6'
+app.secret_key = os.getenv('SECRET')
 # Session(app)
 db.init_app(app)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 #Models
+class UserEntity(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(250), unique=True,
+                         nullable=False)
+    password = db.Column(db.String(250),
+                         nullable=False)
+    exchanges_owned = db.relationship('ExchangeEntity', backref='user')
+
 class CurrencyEntity(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     file_name = db.Column(db.String(30), nullable=False)
     short = db.Column(db.String(3), nullable=False)
     flag = db.Column(db.BLOB, nullable=False)
 
+class ExchangeEntity(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(32), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user_entity.id'))
+    currencies = db.relationship('CurrencyEntity', secondary='currency_exchange', backref='exchanges')
+
+currency_exchange = db.Table('currency_exchange',
+                    db.Column('currency_id', db.Integer, db.ForeignKey('currency_entity.id'), primary_key=True),
+                    db.Column('exchange_id', db.Integer, db.ForeignKey('exchange_entity.id'), primary_key=True)
+                    )
+
 @app.route('/')
 def index():
+    return render_template('index.html')
+
+@login_manager.user_loader
+def loader_user(user_id):
+    return UserEntity.query.get(user_id)
+
+@app.route('/register', methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        
+        user = UserEntity.query.filter_by(username=username).first()
+
+        if user:
+            flash("User with this username already exists")
+            return render_template("register.html")
+        
+        user = UserEntity(username=username, 
+                          password=generate_password_hash(password=password, method='scrypt'))
+
+        db.session.add(user)
+        db.session.commit()
+
+        return render_template('index.html')
+
+    return render_template("register.html")
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        user = UserEntity.query.filter_by(username=request.form.get("username")).first()
+
+        if not user or not check_password_hash(user.password, request.form.get('password')):
+                return render_template("login.html")
+
+        login_user(user)
+        return render_template('index.html')
+        
+    return render_template("login.html")
+
+@app.route("/logout")
+def logout():
+    logout_user()
     return render_template('index.html')
 
 @app.route('/curr-add', methods=['GET', 'POST'])
@@ -61,6 +134,30 @@ def currAdd():
             return redirect(request.url)
     else:
         return render_template('curr_add.html')
+    
+@app.route('/add-to-exchange', methods=['GET', 'PUT'])
+def addToExchange():
+    if request.method == 'PUT':
+        data = request.get_json()
+        selected_exchanges = data.get('selected_exchanges', [])
+        selected_currencies = data.get('selected_currencies', [])
+
+        # Assuming the current_user is already defined and authenticated
+        user_exchanges = ExchangeEntity.query.filter_by(user_id=current_user.id).all()
+        for exchange in user_exchanges:
+            if exchange.name in selected_exchanges:
+                exchange.currencies = CurrencyEntity.query.filter(CurrencyEntity.short.in_(selected_currencies)).all()
+            else:
+                exchange.currencies = []
+
+        db.session.commit()
+        return jsonify({'message': 'Exchange data updated successfully'})
+    elif request.method == 'POST':
+        currencies = CurrencyEntity.query.all()
+        return render_template('curr_exchange.html', currencies=currencies)
+    else:
+        currencies = CurrencyEntity.query.all()
+        return render_template('curr_exchange.html', currencies=currencies)
 
 
 @app.route('/curr-opt')
@@ -73,16 +170,20 @@ def currency():
         pass
     else:
         currencies = CurrencyEntity.query.all()
-        return render_template('currency.html', currencies=currencies)
-
+        exchanges = ExchangeEntity.query.filter_by(user_id=current_user.id)
+        return render_template('currency.html', currencies=currencies, exchanges=exchanges)
     return '', 200
 
 @app.route('/create-curr-pdf', methods=['POST'])
 def createPdf():
-    data = request.form['currencies']
-    return render_template('create_curr_pdf.html', currencies = data.split(','), currencies_input = data)
+    exchange = request.form['currencies']
+    entity = ExchangeEntity.query.filter_by(name=exchange, user_id=current_user.id).first()
+    currency_list = []
+    if exchange:
+        currencies = entity.currencies
+        currency_list = [currency.short for currency in currencies]
+    return render_template('create_curr_pdf.html', currencies = currency_list, currencies_input = currency_list)
     
-
 @app.route('/download', methods=['POST'])
 def download_pdf():
     currencies = []
@@ -113,8 +214,6 @@ def download_pdf():
     pdf_creator = PDF('P', 'mm', 'A4')
     pdf_name = pdf_creator.create(curr_dict)
     return send_file(pdf_name, as_attachment=True)
-
-
     
 def open_flag(file_name):
     with open(file_name, 'rb') as file:

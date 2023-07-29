@@ -53,10 +53,10 @@ input {
     font-weight: 300;
     line-height: 1.6rem;
     text-decoration: none;
-}
 
-.btn:hover {
-    text-shadow: 5px, 5px, 5px, #8F43EE;
+    &:hover {
+        text-shadow: 5px, 5px, 5px, #8F43EE;
+    }
 }
 
 #container {
@@ -68,4 +68,49 @@ input {
     align-items: center;
     gap: 4rem;
     background: #2D2727;
+}
+
+.auth-nav {
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding-top: 1rem;
+    display: flex;
+    justify-content: space-evenly;
+    width: 20rem;
+    flex-direction: row;
+}
+
+.auth-btn {
+    width: auto;
+    color: #F0EB8D;
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 1.6rem;
+    text-decoration: none;
+    
+    & a {
+        color: #F0EB8D;
+    }
+}
+
+.login-warning {
+    color: #F0EB8D;
+}
+
+#logout-btn {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 1rem 2rem;
+    width: auto;
+    color: #F0EB8D;
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 1.6rem;
+    text-decoration: none;
+    
+    & a {
+        color: #F0EB8D;
+    }
 }

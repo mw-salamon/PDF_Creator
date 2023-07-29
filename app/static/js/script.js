@@ -1,6 +1,7 @@
 const selectBtn = document.querySelector(".select-btn"), 
         items = document.querySelectorAll(".item"), 
-        addBtn = document.querySelector(".add-from-list-btn");
+        addBtn = document.querySelector(".add-from-list-btn"),
+        addTmpBtn = document.querySelectorAll(".add-from-template-btn");
 
 selectBtn.addEventListener("click", () => {
     selectBtn.classList.toggle("open");
@@ -42,6 +43,7 @@ addBtn.addEventListener('click', function(event) {
     form.action = "/create-curr-pdf";  
 
     element1.value = list;
+    
     element1.name = "currencies";
     form.appendChild(element1);
 
@@ -49,3 +51,24 @@ addBtn.addEventListener('click', function(event) {
 
     form.submit();
 });
+
+addTmpBtn.forEach(btn => {
+    btn.addEventListener('click', function(event) {
+        event.preventDefault();
+    
+        let form = document.createElement("form");
+        let element1 = document.createElement("input");
+    
+        form.method = "POST";
+        form.action = "/create-curr-pdf";  
+
+        element1.value = btn.innerText;
+        
+        element1.name = "currencies";
+        form.appendChild(element1);
+    
+        document.body.appendChild(form);
+    
+        form.submit();
+    })
+})
