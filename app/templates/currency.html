@@ -6,45 +6,50 @@
 {% endblock %}
 
 {% block body %}
-{% if current_user.is_authenticated %}
-<a href="/logout" id="logout-btn">Logout</a>
-{% endif %}
-<div id="container">
-    <h1 id="header"><a href="/">PDF Creator</a></h1>
-
-    {% if current_user.is_authenticated %}
-    <div class="add-container">
-        <div class="dropdown-container">
-            <div class="select-btn">
-                <span class="curr-btn">Select</span>
-                <span class="arrow-down">
-                    <i class="fa-solid fa-chevron-down"></i>
-                </span>
-            </div>
-            {% if currencies|length >= 1 %}
-            <ul class="list-items">
-                {% for curr in currencies %}
-                <li class="item">
-                    <span class="checkbox">
-                        <i class="fa-solid fa-check check-icon"></i>
+    <div id="nav-bar">
+        {% if current_user.is_authenticated %}
+        <a href="/logout" class="nav-btn">Logout</a>
+        {% if current_user.role == "admin" %}
+        <a href="/admin-panel" class="nav-btn">Admin panel</a>
+        {% endif %}
+        {% endif %}
+    </div>
+    <div id="container">
+        <h1 id="header"><a href="/">PDF Creator</a></h1>
+    
+        {% if current_user.is_authenticated %}
+        <div class="add-container">
+            <div class="dropdown-container">
+                <div class="select-btn">
+                    <span class="curr-btn">Select</span>
+                    <span class="arrow-down">
+                        <i class="fa-solid fa-chevron-down"></i>
                     </span>
-                    <span class="item-text">{{curr.short}}</span>
-                </li>
-                {% endfor %}
-            </ul>
-            {% endif %}
+                </div>
+                {% if currencies|length >= 1 %}
+                <ul class="list-items">
+                    {% for curr in currencies %}
+                    <li class="item">
+                        <span class="checkbox">
+                            <i class="fa-solid fa-check check-icon"></i>
+                        </span>
+                        <span class="item-text">{{curr.short}}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            <a class="add-from-list-btn" name="add-btn">Add</a>
         </div>
-        <a class="add-from-list-btn" name="add-btn">Add</a>
+    
+        <div class="exchange-templates">
+            {% for e in exchanges %}
+            <a class="add-from-template-btn">{{ e.name }}</a>   
+            {% endfor %}
+        </div>
+        {% else %}
+        <h1 class="login-warning">You are not logged in</h1>
+        {% endif %}
     </div>
-
-    <div class="exchange-templates">
-        {% for e in exchanges %}
-        <a class="add-from-template-btn">{{ e.name }}</a>   
-        {% endfor %}
-    </div>
-    {% else %}
-    <h1 class="login-warning">You are not logged in</h1>
-    {% endif %}
-</div>
-<script src="../static/js/script.js"></script>
+    <script src="../static/js/script.js"></script>
 {% endblock %}

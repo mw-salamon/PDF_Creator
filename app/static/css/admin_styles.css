@@ -1,0 +1,13 @@
+.admin-cont {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 2rem;
+    width: 30rem;
+
+    & .btn {
+        width: 11rem;
+        height: 4rem;
+        text-align: center;
+        box-sizing: border-box;
+    }
+}

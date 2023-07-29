@@ -6,30 +6,35 @@
 {% endblock %}
 
 {% block body %}
-{% if current_user.is_authenticated %}
-<a href="/logout" id="logout-btn">Logout</a>
-{% endif %}
-<div id="container">
-    <h1 id="header"><a href="/">PDF Creator</a></h1>
-
-    {% if current_user.is_authenticated %}
-    <div class="add-cont">
-        <form action="/curr-add" method="POST" enctype="multipart/form-data">
-            <div class="short">
-                <input type="text" name="short" id="short" required autocomplete="off" placeholder="Currency Short">
-            </div>
-            <div class="path">
-                <input type="file" name="file" id="file" required>
-                <label for="file">Upload Flag</label>
-            </div>
-
-            <input id="submit-btn" type="submit" value="Add">
-        </form>
+    <div id="nav-bar">
+        {% if current_user.is_authenticated %}
+        <a href="/logout" class="nav-btn">Logout</a>
+        {% if current_user.role == "admin" %}
+        <a href="/admin-panel" class="nav-btn">Admin panel</a>
+        {% endif %}
+        {% endif %}
     </div>
-    {% else %}
-    <h1 class="login-warning">You are not logged in</h1>
-    {% endif %}
-</div>
+    <div id="container">
+        <h1 id="header"><a href="/">PDF Creator</a></h1>
 
-<script src="../static/js/script.js"></script>
+        {% if current_user.is_authenticated %}
+        <div class="add-cont">
+            <form action="/curr-add" method="POST" enctype="multipart/form-data">
+                <div class="short">
+                    <input type="text" name="short" id="short" required autocomplete="off" placeholder="Currency Short">
+                </div>
+                <div class="path">
+                    <input type="file" name="file" id="file" required>
+                    <label for="file">Upload Flag</label>
+                </div>
+
+                <input id="submit-btn" type="submit" value="Add">
+            </form>
+        </div>
+        {% else %}
+        <h1 class="login-warning">You are not logged in</h1>
+        {% endif %}
+    </div>
+
+    <script src="../static/js/script.js"></script>
 {% endblock %}

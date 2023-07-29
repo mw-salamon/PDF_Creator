@@ -2,8 +2,8 @@
 
 {% block head %}
 <title>PDF Creator</title>
+<link rel="stylesheet" href="../static/css/admin_styles.css">
 {% endblock %}
-
 
 {% block body %}
     <div id="nav-bar">
@@ -18,10 +18,16 @@
     <div id="container">
         <h1 id="header">PDF Creator</h1>
 
-        {% if not current_user.is_authenticated %}
-        <a href="/login" class="auth-btn">Login</a>
+        {% if current_user.is_authenticated %}
+
+        <div class="admin-cont">
+            <a href="/register" class="btn">Register a user</a>
+        </div>
+
         {% else %}
-        <a class="btn" href="/curr-opt">Currency prices</a>
+        <div class="auth-nav">
+            <a href="/login" class="auth-btn">Login</a>
+        </div>
         {% endif %}
 
     </div>

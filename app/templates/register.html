@@ -3,25 +3,33 @@
 {% block head %}
 <title>PDF Creator</title>
 <link rel="stylesheet" href="../static/css/auth_styles.css">
-
 {% endblock %}
 
 {% block body %}
-<div id="container">
-    <h1 id="header"><a href="/">PDF Creator</a></h1>
-
-    <form action="#" method="post">
-      <div class="auth-input">
-        <label for="username">Username:</label>
-        <input type="text" name="username" />
+    <div id="nav-bar">
+        {% if current_user.is_authenticated %}
+        <a href="/logout" class="nav-btn">Logout</a>
+        {% if current_user.role == "admin" %}
+        <a href="/admin-panel" class="nav-btn">Admin panel</a>
+        {% endif %}
+        {% endif %}
     </div>
-    <div class="auth-input">
-        <label for="password">Password:</label>
-        <input type="password" name="password" />
+    
+    <div id="container">
+        <h1 id="header"><a href="/">PDF Creator</a></h1>
+    
+        <form action="#" method="post">
+          <div class="auth-input">
+            <label for="username">Username:</label>
+            <input type="text" name="username" />
+        </div>
+        <div class="auth-input">
+            <label for="password">Password:</label>
+            <input type="password" name="password" />
+        </div>
+        <div>
+            <button type="submit" class="auth-btn">Sign up</button>
+        </div>
+        </form>
     </div>
-    <div>
-        <button type="submit" class="auth-btn">Submit</button>
-    </div>
-    </form>
-</div>
 {% endblock %}

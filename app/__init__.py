@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, render_template, request, redirect, flash, send_file, url_for
-from flask_login import LoginManager, UserMixin, current_user, login_user, logout_user
+from flask_login import LoginManager, UserMixin, current_user, login_required, login_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import inspect
 from werkzeug.utils import secure_filename
@@ -23,7 +23,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.secret_key = os.getenv('SECRET')
-# Session(app)
 db.init_app(app)
 
 login_manager = LoginManager()
@@ -40,6 +39,8 @@ class UserEntity(UserMixin, db.Model):
                          nullable=False)
     password = db.Column(db.String(250),
                          nullable=False)
+    role = db.Column(db.String(8),
+                     nullable=False)
     exchanges_owned = db.relationship('ExchangeEntity', backref='user')
 
 class CurrencyEntity(db.Model):
@@ -80,7 +81,8 @@ def register():
             return render_template("register.html")
         
         user = UserEntity(username=username, 
-                          password=generate_password_hash(password=password, method='scrypt'))
+                          password=generate_password_hash(password=password, method='scrypt'),
+                          role="user")
 
         db.session.add(user)
         db.session.commit()
@@ -103,11 +105,18 @@ def login():
     return render_template("login.html")
 
 @app.route("/logout")
+@login_required
 def logout():
     logout_user()
     return render_template('index.html')
 
+@app.route("/admin-panel")
+@login_required
+def adminPanel():
+    return render_template('admin_panel.html')
+
 @app.route('/curr-add', methods=['GET', 'POST'])
+@login_required
 def currAdd():
     if request.method=='POST':
         if 'file' not in request.files:
@@ -125,6 +134,12 @@ def currAdd():
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
                 flag_data = file.read()
+
+                curr = CurrencyEntity.query.filter_by(short=curr_short).first()
+
+                if curr:
+                    return redirect('/curr-opt')
+
                 new_curr = CurrencyEntity(file_name=filename, short=curr_short, flag=flag_data)
                 db.session.add(new_curr)
                 db.session.commit()
@@ -135,15 +150,34 @@ def currAdd():
     else:
         return render_template('curr_add.html')
     
+@app.route('/exchange-add', methods=['GET', 'POST'])
+@login_required
+def exchangeAdd():
+    if request.method=='POST':
+        name = request.form['exchange']
+
+        exchange = ExchangeEntity.query.filter_by(name=name, user_id=current_user.id).first()
+
+        if exchange:
+            return redirect('/curr-opt')
+
+        new_exchange = ExchangeEntity(name=name, user_id=current_user.id)
+        db.session.add(new_exchange)
+        db.session.commit()
+        return redirect('/curr-opt')
+    else:
+        return render_template('exchange.html')
+    
 @app.route('/add-to-exchange', methods=['GET', 'PUT'])
+@login_required
 def addToExchange():
     if request.method == 'PUT':
         data = request.get_json()
         selected_exchanges = data.get('selected_exchanges', [])
         selected_currencies = data.get('selected_currencies', [])
 
-        # Assuming the current_user is already defined and authenticated
         user_exchanges = ExchangeEntity.query.filter_by(user_id=current_user.id).all()
+
         for exchange in user_exchanges:
             if exchange.name in selected_exchanges:
                 exchange.currencies = CurrencyEntity.query.filter(CurrencyEntity.short.in_(selected_currencies)).all()
@@ -161,10 +195,12 @@ def addToExchange():
 
 
 @app.route('/curr-opt')
+@login_required
 def currOpt():
     return render_template('curr_options.html')
 
 @app.route('/curr-opt/from-list', methods=['GET', 'POST'])
+@login_required
 def currency():
     if request.method == 'POST':
         pass
@@ -175,6 +211,7 @@ def currency():
     return '', 200
 
 @app.route('/create-curr-pdf', methods=['POST'])
+@login_required
 def createPdf():
     exchange = request.form['currencies']
     entity = ExchangeEntity.query.filter_by(name=exchange, user_id=current_user.id).first()
@@ -185,6 +222,7 @@ def createPdf():
     return render_template('create_curr_pdf.html', currencies = currency_list, currencies_input = currency_list)
     
 @app.route('/download', methods=['POST'])
+@login_required
 def download_pdf():
     currencies = []
     data = request.form['currencies']

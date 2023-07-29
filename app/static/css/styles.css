@@ -70,21 +70,10 @@ input {
     background: #2D2727;
 }
 
-.auth-nav {
-    position: absolute;
-    left: 0;
-    top: 0;
-    padding-top: 1rem;
-    display: flex;
-    justify-content: space-evenly;
-    width: 20rem;
-    flex-direction: row;
-}
-
 .auth-btn {
     width: auto;
     color: #F0EB8D;
-    font-size: 1rem;
+    font-size: 2rem;
     font-weight: 300;
     line-height: 1.6rem;
     text-decoration: none;
@@ -98,10 +87,14 @@ input {
     color: #F0EB8D;
 }
 
-#logout-btn {
+#nav-bar {
     position: absolute;
     left: 0;
-    right: 0;
+    top: 0;
+    display: flex;
+}
+
+.nav-btn {
     margin: 1rem 2rem;
     width: auto;
     color: #F0EB8D;
