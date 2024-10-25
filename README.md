@@ -6,8 +6,6 @@ My motive behind creation of this app was to design a universal tool, which coul
 
 In the future I hope to expand the template list and have my life even more convenient. Also I could add features like saving few of the pdfs that were created if the user would like to download them again. Also to make it even more personal I could implement sign in, for each user to have their own pdfs.
 
-The app is also deployed on AWS EC2 instance and database is deployed on AWS RD. You can check it by entering the url: http://pdfcreatorkfps.com/
-
 ### Tech Stack:
 - Python
 - Flask
